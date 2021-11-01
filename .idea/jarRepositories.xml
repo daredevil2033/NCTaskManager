@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteRepositoriesConfiguration">
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="https://repo.maven.apache.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="service-modeling-tools" />
+      <option name="name" value="Service Modeling Tools Release Repository/" />
+      <option name="url" value="https://artifactorycn.netcracker.com/demo.service-modeling-tools.mvn" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="pd.saas-sfa.mvn.group" />
+      <option name="name" value="pd.saas-sfa.mvn.group" />
+      <option name="url" value="https://artifactorycn.netcracker.com/pd.saas-sfa.mvn.group" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Maven Central repository" />
+      <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="nc-nexus-snapshots" />
+      <option name="name" value="nc-nexus-snapshots" />
+      <option name="url" value="https://nexussrv.netcracker.com/content/groups/gui-repositories" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="jboss.community" />
+      <option name="name" value="JBoss Community repository" />
+      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="pd.sandbox-publications.mvn.group" />
+      <option name="name" value="pd.sandbox-publications.mvn.group" />
+      <option name="url" value="https://artifactorycn.netcracker.com/pd.sandbox-publications.mvn.group/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="https://nexussrv.netcracker.com/content/groups/gui-repositories" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="pd.sandbox-l2ci.mvn.snapshots.group" />
+      <option name="name" value="pd.sandbox-l2ci.mvn.snapshots.group" />
+      <option name="url" value="https://artifactorycn.netcracker.com/pd.sandbox-l2ci.mvn.snapshots.group/" />
+    </remote-repository>
+  </component>
+</project>
