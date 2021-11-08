@@ -11,16 +11,23 @@ public class Task {
 
     public Task(String title, int time) {
         this.title = title;
-        this.time = time;
+        if(time<0)throw new IllegalArgumentException("Time elapsed cannot be less than 0");
+        else this.time = time;
         this.active = false;
         this.repeated = false;
     }
 
     public Task(String title, int start, int end, int interval) {
         this.title = title;
-        this.start = start;
-        this.end = end;
-        this.interval = interval;
+        if(start<0)throw new IllegalArgumentException("Start cannot be less than 0");
+        else if(end<=0)throw new IllegalArgumentException("End must be greater than 0");
+        else if(start>end)throw new IllegalArgumentException("Start cannot be after End");
+        else{
+            this.start = start;
+            this.end = end;
+        }
+        if(interval<=0)throw new IllegalArgumentException("Interval must be greater than 0");
+        else this.interval = interval;
         this.active = false;
         this.repeated = true;
     }
@@ -47,7 +54,8 @@ public class Task {
     }
 
     public void setTime(int time) {
-        this.time = time;
+        if(time<0)throw new IllegalArgumentException("Time elapsed cannot be less than 0");
+        else this.time = time;
         this.repeated = false;
     }
 
@@ -67,9 +75,15 @@ public class Task {
     }
 
     public void setTime(int start, int end, int interval) {
-        this.start = start;
-        this.end = end;
-        this.interval = interval;
+        if(start<0)throw new IllegalArgumentException("Start cannot be less than 0");
+        else if(end<=0)throw new IllegalArgumentException("End must be greater than 0");
+        else if(start>end)throw new IllegalArgumentException("Start cannot be after End");
+        else{
+            this.start = start;
+            this.end = end;
+        }
+        if(interval<=0)throw new IllegalArgumentException("Interval must be greater than 0");
+        else this.interval = interval;
         this.repeated = true;
     }
 

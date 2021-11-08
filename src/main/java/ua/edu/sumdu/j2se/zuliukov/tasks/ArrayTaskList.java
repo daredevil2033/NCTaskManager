@@ -5,14 +5,15 @@ public class ArrayTaskList {
     private int size;
 
     public void add(Task task){
-        if(size==0){
-            tasks = new Task[++size];
-            tasks[size - 1] = task;
-        }
-        else{
-            Task[] temp = tasks;
-            tasks = new Task[++size];
-            System.arraycopy(temp, 0, tasks, 0, size - 1);
+        if(task==null)throw new IllegalArgumentException("Task cannot be null");
+        else {
+            if (size == 0) {
+                tasks = new Task[++size];
+            } else {
+                Task[] temp = tasks;
+                tasks = new Task[++size];
+                System.arraycopy(temp, 0, tasks, 0, size - 1);
+            }
             tasks[size - 1] = task;
         }
     }
@@ -41,7 +42,8 @@ public class ArrayTaskList {
     }
 
     public Task getTask(int index) {
-        return tasks[index];
+        if(index<0||index>size-1)throw new IndexOutOfBoundsException();
+        else return tasks[index];
     }
 
     public ArrayTaskList incoming(int from, int to){
