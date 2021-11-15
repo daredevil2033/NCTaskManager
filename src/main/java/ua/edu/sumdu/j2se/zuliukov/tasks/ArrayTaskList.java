@@ -1,10 +1,9 @@
 package ua.edu.sumdu.j2se.zuliukov.tasks;
 
-public class ArrayTaskList {
+public class ArrayTaskList extends AbstractTaskList{
     private Task[] tasks;
-    private int size;
 
-    public void add(Task task){
+    public void add(Task task) throws IllegalArgumentException {
         if(task==null)throw new IllegalArgumentException("Task cannot be null");
         else {
             if (size == 0) {
@@ -41,16 +40,12 @@ public class ArrayTaskList {
         return size;
     }
 
-    public Task getTask(int index) {
+    public Task getTask(int index) throws IndexOutOfBoundsException {
         if(index<0||index>size-1)throw new IndexOutOfBoundsException();
         else return tasks[index];
     }
 
-    public ArrayTaskList incoming(int from, int to){
-        ArrayTaskList result = new ArrayTaskList();
-        for (int i = 0; i < size; i++) {
-            if(tasks[i].nextTimeAfter(from)!=-1 && tasks[i].nextTimeAfter(from)<to)result.add(tasks[i]);
-        }
-        return result;
+    public ArrayTaskList() {
+        super(0,ListTypes.types.ARRAY);
     }
 }
