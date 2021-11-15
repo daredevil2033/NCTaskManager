@@ -9,7 +9,7 @@ public class Task {
     private boolean active;
     private boolean repeated;
 
-    public Task(String title, int time) {
+    public Task(String title, int time) throws IllegalArgumentException {
         this.title = title;
         if(time<0)throw new IllegalArgumentException("Time elapsed cannot be less than 0");
         else this.time = time;
@@ -17,7 +17,7 @@ public class Task {
         this.repeated = false;
     }
 
-    public Task(String title, int start, int end, int interval) {
+    public Task(String title, int start, int end, int interval) throws IllegalArgumentException {
         this.title = title;
         if(start<0)throw new IllegalArgumentException("Start cannot be less than 0");
         else if(end<=0)throw new IllegalArgumentException("End must be greater than 0");
@@ -53,7 +53,7 @@ public class Task {
         else return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(int time) throws IllegalArgumentException {
         if(time<0)throw new IllegalArgumentException("Time elapsed cannot be less than 0");
         else this.time = time;
         this.repeated = false;
@@ -74,7 +74,7 @@ public class Task {
         else return 0;
     }
 
-    public void setTime(int start, int end, int interval) {
+    public void setTime(int start, int end, int interval) throws IllegalArgumentException {
         if(start<0)throw new IllegalArgumentException("Start cannot be less than 0");
         else if(end<=0)throw new IllegalArgumentException("End must be greater than 0");
         else if(start>end)throw new IllegalArgumentException("Start cannot be after End");

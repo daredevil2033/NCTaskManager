@@ -1,6 +1,6 @@
 package ua.edu.sumdu.j2se.zuliukov.tasks;
 
-public class LinkedTaskList {
+public class LinkedTaskList extends AbstractTaskList{
     class Node{
         Task data;
         Node next;
@@ -12,9 +12,8 @@ public class LinkedTaskList {
     }
     private Node head = null;
     //private Node tail = null;
-    private int size = 0;
 
-    public void add(Task task){
+    public void add(Task task) throws IllegalArgumentException {
         if(task==null)throw new IllegalArgumentException("Task cannot be null");
         else {
             Node newNode = new Node(task);
@@ -54,7 +53,7 @@ public class LinkedTaskList {
         return size;
     }
 
-    public Task getTask(int index){
+    public Task getTask(int index) throws IndexOutOfBoundsException {
         if(index<0||index>size-1)throw new IndexOutOfBoundsException();
         else {
             if(index==0)return head.data;
@@ -67,11 +66,7 @@ public class LinkedTaskList {
         }
     }
 
-    public LinkedTaskList incoming(int from, int to){
-        LinkedTaskList result = new LinkedTaskList();
-        for (Node iter = head; iter!=null; iter=iter.next) {
-            if(iter.data.nextTimeAfter(from)!=-1 && iter.data.nextTimeAfter(from)<to)result.add(iter.data);
-        }
-        return result;
+    public LinkedTaskList() {
+        super(0,ListTypes.types.LINKED);
     }
 }
