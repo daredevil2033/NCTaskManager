@@ -1,33 +1,26 @@
 package ua.edu.sumdu.j2se.zuliukov.tasks;
 
 import java.util.Iterator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class LinkedTaskList extends AbstractTaskList implements Cloneable {
-    class Node {
-        Task data;
-        Node next;
-
-        public Node(Task data) {
-            this.data = data;
-            this.next = null;
-        }
-    }
-
     private Node head = null;
-    //private Node tail = null;
+
+    public LinkedTaskList() {
+        super(0, ListTypes.types.LINKED);
+    }
 
     public void add(Task task) throws IllegalArgumentException {
         if (task == null) throw new IllegalArgumentException("Task cannot be null");
         else {
             Node newNode = new Node(task);
             if (head == null) head = newNode;
-            //else tail.next = newNode;
             Node iter = head;
             for (int i = 0; i < size - 1; i++) {
                 iter = iter.next;
             }
             iter.next = newNode;
-            //tail = newNode;
             size++;
         }
     }
@@ -41,10 +34,8 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
         Node previous = head;
         while (previous.next != null) {
             if (previous.next.data.equals(task)) {
-                //if(previous.next.next==null)tail=previous;
                 previous.next = previous.next.next;
                 size--;
-                //if(previous.next==null)tail=previous;
                 return true;
             }
             previous = previous.next;
@@ -60,53 +51,11 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
         if (index < 0 || index > size - 1) throw new IndexOutOfBoundsException();
         else {
             if (index == 0) return head.data;
-            //if(index==size-1)return tail.data;
             Node iter = head;
             for (int i = 0; i < index; i++) {
                 iter = iter.next;
             }
             return iter.data;
-        }
-    }
-
-    public LinkedTaskList() {
-        super(0, ListTypes.types.LINKED);
-    }
-
-    class LinkedTaskListIterator implements Iterator<Task> {
-        Node last;
-        Node next;
-
-        public LinkedTaskListIterator() {
-            last = null;
-            next = head;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return next != null;
-        }
-
-        @Override
-        public Task next() {
-            Task current = next.data;
-            if (next != head) {
-                if (last != null) {
-                    if (last.next != next) last = last.next;
-                } else last = head;
-            }
-            next = next.next;
-            return current;
-        }
-
-        @Override
-        public void remove() {
-            if (next == head) throw new IllegalStateException();
-            else {
-                if (last != null) last.next = next;
-                else head = next;
-                size--;
-            }
         }
     }
 
@@ -165,5 +114,57 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
             clone.add(task.clone());
         }
         return clone;
+    }
+
+    @Override
+    public Stream<Task> getStream() {
+        return StreamSupport.stream(spliterator(), false);
+    }
+
+    class Node {
+        Task data;
+        Node next;
+
+        public Node(Task data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
+
+    class LinkedTaskListIterator implements Iterator<Task> {
+        Node last;
+        Node next;
+
+        public LinkedTaskListIterator() {
+            last = null;
+            next = head;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return next != null;
+        }
+
+        @Override
+        public Task next() {
+            Task current = next.data;
+            if (next != head) {
+                if (last != null) {
+                    if (last.next != next) last = last.next;
+                } else last = head;
+            }
+            next = next.next;
+            return current;
+        }
+
+        @Override
+        public void remove() {
+            if (next == head) throw new IllegalStateException();
+            else {
+                if (last != null) last.next = next;
+                else head = next;
+                size--;
+            }
+        }
     }
 }
