@@ -1,9 +1,14 @@
 package ua.edu.sumdu.j2se.zuliukov.tasks;
 
 import java.util.Iterator;
+import java.util.stream.Stream;
 
 public class ArrayTaskList extends AbstractTaskList implements Cloneable {
     private Task[] tasks;
+
+    public ArrayTaskList() {
+        super(0, ListTypes.types.ARRAY);
+    }
 
     public void add(Task task) throws IllegalArgumentException {
         if (task == null) throw new IllegalArgumentException("Task cannot be null");
@@ -44,45 +49,6 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
     public Task getTask(int index) throws IndexOutOfBoundsException {
         if (index < 0 || index > size - 1) throw new IndexOutOfBoundsException();
         else return tasks[index];
-    }
-
-    public ArrayTaskList() {
-        super(0, ListTypes.types.ARRAY);
-    }
-
-    class ArrayTaskListIterator implements Iterator<Task> {
-        int current;
-
-        public ArrayTaskListIterator() {
-            current = -1;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return current != size - 1;
-        }
-
-        @Override
-        public Task next() {
-            return tasks[++current];
-        }
-
-        @Override
-        public void remove() {
-            if (current == -1) throw new IllegalStateException();
-            else {
-                if (size == 1) {
-                    tasks = null;
-                    size--;
-                } else {
-                    Task[] temp = tasks;
-                    tasks = new Task[--size];
-                    System.arraycopy(temp, 0, tasks, 0, current);
-                    System.arraycopy(temp, current + 1, tasks, current, size - current);
-                }
-                current--;
-            }
-        }
     }
 
     @Override
@@ -136,5 +102,45 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
             clone.add(this.tasks[i].clone());
         }
         return clone;
+    }
+
+    @Override
+    public Stream<Task> getStream() {
+        return Stream.of(tasks);
+    }
+
+    class ArrayTaskListIterator implements Iterator<Task> {
+        int current;
+
+        public ArrayTaskListIterator() {
+            current = -1;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return current != size - 1;
+        }
+
+        @Override
+        public Task next() {
+            return tasks[++current];
+        }
+
+        @Override
+        public void remove() {
+            if (current == -1) throw new IllegalStateException();
+            else {
+                if (size == 1) {
+                    tasks = null;
+                    size--;
+                } else {
+                    Task[] temp = tasks;
+                    tasks = new Task[--size];
+                    System.arraycopy(temp, 0, tasks, 0, current);
+                    System.arraycopy(temp, current + 1, tasks, current, size - current);
+                }
+                current--;
+            }
+        }
     }
 }
