@@ -20,12 +20,4 @@ public abstract class AbstractTaskList implements Iterable<Task> {
     public abstract Task getTask(int index) throws IndexOutOfBoundsException;
 
     public abstract Stream<Task> getStream();
-
-    public final AbstractTaskList incoming(int from, int to) throws IllegalArgumentException {
-        if (from < 0) throw new IllegalArgumentException("From cannot be less than 0");
-        if (to < 0) throw new IllegalArgumentException("To cannot be less than 0");
-        AbstractTaskList tempTaskList = TaskListFactory.createTaskList(type);
-        getStream().filter(task -> (task.nextTimeAfter(from) != -1 && task.nextTimeAfter(from) <= to)).forEach(tempTaskList::add);
-        return tempTaskList;
-    }
 }
