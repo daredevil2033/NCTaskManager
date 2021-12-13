@@ -1,27 +1,28 @@
 package ua.edu.sumdu.j2se.zuliukov.tasks;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 public class Task implements Cloneable {
     private String title;
-    private int time;
-    private int start;
-    private int end;
+    private LocalDateTime time;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private int interval;
     private boolean active;
     private boolean repeated;
 
-    public Task(String title, int time) throws IllegalArgumentException {
-        this.title = title;
-        if (time < 0) throw new IllegalArgumentException("Time elapsed cannot be less than 0");
-        else this.time = time;
+    public Task(String title, LocalDateTime time) throws IllegalArgumentException {
+        if (time == null) throw new IllegalArgumentException("Time cannot be null");
+        else this.title = title;
+        this.time = time;
         this.active = false;
         this.repeated = false;
     }
 
-    public Task(String title, int start, int end, int interval) throws IllegalArgumentException {
+    public Task(String title, LocalDateTime start, LocalDateTime end, int interval) throws IllegalArgumentException {
         this.title = title;
-        if (start < 0) throw new IllegalArgumentException("Start cannot be less than 0");
-        else if (end <= 0) throw new IllegalArgumentException("End must be greater than 0");
-        else if (start > end) throw new IllegalArgumentException("Start cannot be after End");
+        if (start.isAfter(end)) throw new IllegalArgumentException("Start cannot be after End");
         else {
             this.start = start;
             this.end = end;
@@ -48,23 +49,23 @@ public class Task implements Cloneable {
         this.active = active;
     }
 
-    public int getTime() {
+    public LocalDateTime getTime() {
         if (repeated) return start;
         else return time;
     }
 
-    public void setTime(int time) throws IllegalArgumentException {
-        if (time < 0) throw new IllegalArgumentException("Time elapsed cannot be less than 0");
+    public void setTime(LocalDateTime time) throws IllegalArgumentException {
+        if (time == null) throw new IllegalArgumentException("Time cannot be null");
         else this.time = time;
         this.repeated = false;
     }
 
-    public int getStartTime() {
+    public LocalDateTime getStartTime() {
         if (repeated) return start;
         else return time;
     }
 
-    public int getEndTime() {
+    public LocalDateTime getEndTime() {
         if (repeated) return end;
         else return time;
     }
@@ -74,10 +75,8 @@ public class Task implements Cloneable {
         else return 0;
     }
 
-    public void setTime(int start, int end, int interval) throws IllegalArgumentException {
-        if (start < 0) throw new IllegalArgumentException("Start cannot be less than 0");
-        else if (end <= 0) throw new IllegalArgumentException("End must be greater than 0");
-        else if (start > end) throw new IllegalArgumentException("Start cannot be after End");
+    public void setTime(LocalDateTime start, LocalDateTime end, int interval) throws IllegalArgumentException {
+        if (start.isAfter(end)) throw new IllegalArgumentException("Start cannot be after End");
         else {
             this.start = start;
             this.end = end;
@@ -91,42 +90,51 @@ public class Task implements Cloneable {
         return repeated;
     }
 
-    public int nextTimeAfter(int current) {
+    public LocalDateTime nextTimeAfter(LocalDateTime current) {
         if (active) {
             if (repeated) {
-                if (current < start) return start;
+                if (current.isBefore(start)) return start;
                 else {
-                    int nextTime = start + interval;
-                    while (nextTime < end) {
-                        if (current < nextTime) {
+                    LocalDateTime nextTime = start.plusSeconds(interval);
+                    while (nextTime.compareTo(end)<=0) {
+                        if (current.isBefore(nextTime)) {
                             return nextTime;
                         }
-                        nextTime += interval;
+                        nextTime = nextTime.plusSeconds(interval);
                     }
-                    return -1;
+                    return null;
                 }
-            } else if (current < time) return time;
-            else return -1;
-        } else return -1;
+            }
+            else if (current.isBefore(time)) return time;
+            else return null;
+        }
+        else return null;
     }
 
     @Override
-    public boolean equals(Object otherObject) {
-        if (this == otherObject) return true;
-        if (otherObject == null || getClass() != otherObject.getClass()) return false;
-        Task other = (Task) otherObject;
-        if (time != other.time) return false;
-        if (start != other.start) return false;
-        if (end != other.end) return false;
-        if (interval != other.interval) return false;
-        if (active != other.active) return false;
-        if (repeated != other.repeated) return false;
-        return title.equals(other.title);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        if (interval != task.interval) return false;
+        if (active != task.active) return false;
+        if (repeated != task.repeated) return false;
+        if (!Objects.equals(title, task.title)) return false;
+        if (!Objects.equals(time, task.time)) return false;
+        if (!Objects.equals(start, task.start)) return false;
+        return Objects.equals(end, task.end);
     }
 
     @Override
     public int hashCode() {
-        return title.hashCode() + time + start + end + interval + (active ? 1 : 0) + (repeated ? 1 : 0);
+        int result = title != null ? title.hashCode() : 0;
+        result = 31 * result + (time != null ? time.hashCode() : 0);
+        result = 31 * result + (start != null ? start.hashCode() : 0);
+        result = 31 * result + (end != null ? end.hashCode() : 0);
+        result = 31 * result + interval;
+        result = 31 * result + (active ? 1 : 0);
+        result = 31 * result + (repeated ? 1 : 0);
+        return result;
     }
 
     @Override
