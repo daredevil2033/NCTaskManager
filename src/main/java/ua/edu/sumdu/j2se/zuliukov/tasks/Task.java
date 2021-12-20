@@ -1,23 +1,25 @@
 package ua.edu.sumdu.j2se.zuliukov.tasks;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Task implements Cloneable {
+public class Task implements Cloneable, Serializable {
     private String title;
     private LocalDateTime time;
     private LocalDateTime start;
     private LocalDateTime end;
-    private int interval;
-    private boolean active;
-    private boolean repeated;
+    private int interval = 0;
+    private boolean active = false;
+    private boolean repeated = false;
+
+    public Task() {
+    }
 
     public Task(String title, LocalDateTime time) throws IllegalArgumentException {
+        this.title = title;
         if (time == null) throw new IllegalArgumentException("Time cannot be null");
-        else this.title = title;
-        this.time = time;
-        this.active = false;
-        this.repeated = false;
+        else this.time = time;
     }
 
     public Task(String title, LocalDateTime start, LocalDateTime end, int interval) throws IllegalArgumentException {
@@ -29,7 +31,6 @@ public class Task implements Cloneable {
         }
         if (interval <= 0) throw new IllegalArgumentException("Interval must be greater than 0");
         else this.interval = interval;
-        this.active = false;
         this.repeated = true;
     }
 
