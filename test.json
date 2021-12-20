@@ -1,0 +1,59 @@
+[
+    {
+        "list_size": 4
+    },
+    {
+        "title_length": 1,
+        "title": "A",
+        "is_active": false,
+        "interval": 0,
+        "time": {
+            "ISO-8601": "2021-12-17T00:00:00.093",
+            "epoch_seconds": 1639692000,
+            "nanoseconds": 93000000
+        }
+    },
+    {
+        "title_length": 1,
+        "title": "B",
+        "is_active": false,
+        "interval": 3600,
+        "start_time": {
+            "ISO-8601": "2021-12-17T00:00:00.093",
+            "epoch_seconds": 1639692000,
+            "nanoseconds": 93000000
+        },
+        "end_time": {
+            "ISO-8601": "2021-12-18T00:00:00.093",
+            "epoch_seconds": 1639778400,
+            "nanoseconds": 93000000
+        }
+    },
+    {
+        "title_length": 1,
+        "title": "C",
+        "is_active": true,
+        "interval": 0,
+        "time": {
+            "ISO-8601": "2021-12-17T00:00:00.093",
+            "epoch_seconds": 1639692000,
+            "nanoseconds": 93000000
+        }
+    },
+    {
+        "title_length": 1,
+        "title": "B",
+        "is_active": true,
+        "interval": 3600,
+        "start_time": {
+            "ISO-8601": "2021-12-17T00:00:00.093",
+            "epoch_seconds": 1639692000,
+            "nanoseconds": 93000000
+        },
+        "end_time": {
+            "ISO-8601": "2021-12-18T00:00:00.093",
+            "epoch_seconds": 1639778400,
+            "nanoseconds": 93000000
+        }
+    }
+]
