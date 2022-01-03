@@ -1,2 +1,6 @@
 /target/
 /.idea/
+/db
+/snap.json
+/class.uml
+/class.png

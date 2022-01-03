@@ -32,7 +32,8 @@ public class Tasks {
                     }
                     taskSet.add(t);
                     dateTimeSetSortedMap.put(nextTime,taskSet);
-                    nextTime = nextTime.plusSeconds(t.getRepeatInterval());
+                    nextTime = t.nextTimeAfter(nextTime);
+                    if (nextTime == null) break;
                 }
             }
             else{

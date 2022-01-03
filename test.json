@@ -8,9 +8,9 @@
         "is_active": false,
         "interval": 0,
         "time": {
-            "ISO-8601": "2021-12-17T00:00:00.093",
-            "epoch_seconds": 1639692000,
-            "nanoseconds": 93000000
+            "ISO-8601": "2021-12-25T00:00:00.029",
+            "epoch_seconds": 1640383200,
+            "nanoseconds": 29000000
         }
     },
     {
@@ -19,14 +19,14 @@
         "is_active": false,
         "interval": 3600,
         "start_time": {
-            "ISO-8601": "2021-12-17T00:00:00.093",
-            "epoch_seconds": 1639692000,
-            "nanoseconds": 93000000
+            "ISO-8601": "2021-12-25T00:00:00.029",
+            "epoch_seconds": 1640383200,
+            "nanoseconds": 29000000
         },
         "end_time": {
-            "ISO-8601": "2021-12-18T00:00:00.093",
-            "epoch_seconds": 1639778400,
-            "nanoseconds": 93000000
+            "ISO-8601": "2021-12-26T00:00:00.029",
+            "epoch_seconds": 1640469600,
+            "nanoseconds": 29000000
         }
     },
     {
@@ -35,9 +35,9 @@
         "is_active": true,
         "interval": 0,
         "time": {
-            "ISO-8601": "2021-12-17T00:00:00.093",
-            "epoch_seconds": 1639692000,
-            "nanoseconds": 93000000
+            "ISO-8601": "2021-12-25T00:00:00.029",
+            "epoch_seconds": 1640383200,
+            "nanoseconds": 29000000
         }
     },
     {
@@ -46,14 +46,14 @@
         "is_active": true,
         "interval": 3600,
         "start_time": {
-            "ISO-8601": "2021-12-17T00:00:00.093",
-            "epoch_seconds": 1639692000,
-            "nanoseconds": 93000000
+            "ISO-8601": "2021-12-25T00:00:00.029",
+            "epoch_seconds": 1640383200,
+            "nanoseconds": 29000000
         },
         "end_time": {
-            "ISO-8601": "2021-12-18T00:00:00.093",
-            "epoch_seconds": 1639778400,
-            "nanoseconds": 93000000
+            "ISO-8601": "2021-12-26T00:00:00.029",
+            "epoch_seconds": 1640469600,
+            "nanoseconds": 29000000
         }
     }
 ]
