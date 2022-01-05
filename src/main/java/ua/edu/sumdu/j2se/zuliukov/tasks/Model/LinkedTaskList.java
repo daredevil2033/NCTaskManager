@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.zuliukov.tasks;
+package ua.edu.sumdu.j2se.zuliukov.tasks.Model;
 
 import java.util.Iterator;
 import java.util.stream.Stream;

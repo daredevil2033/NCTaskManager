@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.zuliukov.tasks;
+package ua.edu.sumdu.j2se.zuliukov.tasks.Model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -97,7 +97,7 @@ public class Task implements Cloneable, Serializable {
                 if (current.isBefore(start)) return start;
                 else {
                     LocalDateTime nextTime = start.plusSeconds(interval);
-                    while (nextTime.compareTo(end)<=0) {
+                    while (nextTime.compareTo(end) <= 0) {
                         if (current.isBefore(nextTime)) {
                             return nextTime;
                         }
@@ -105,11 +105,9 @@ public class Task implements Cloneable, Serializable {
                     }
                     return null;
                 }
-            }
-            else if (current.isBefore(time)) return time;
+            } else if (current.isBefore(time)) return time;
             else return null;
-        }
-        else return null;
+        } else return null;
     }
 
     @Override
