@@ -11,6 +11,7 @@ import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.concurrent.CancellationException;
@@ -31,45 +32,42 @@ public class ConsoleAPI {
             try {
                 TaskIO.readBinary(taskList, file);
             } catch (EOFException e) {
-                logger.error("File db has been corrupted");
-                if (file.delete()) logger.warn("File db was deleted");
-                if (file.createNewFile()) logger.warn("New file db was created");
+                System.err.println("File db has been corrupted");
+                if (file.delete()) System.err.println("File db was deleted");
+                if (file.createNewFile()) System.err.println("New file db was created");
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
-            logger.trace(e.getMessage(), e);
         }
     }
 
     public void writeBinary() {
         try {
             TaskIO.writeBinary(taskList, file);
-            logger.info("Tasks saved");
+            System.out.println("Tasks saved");
         } catch (IOException e) {
             logger.error(e.getMessage());
-            logger.trace(e.getMessage(), e);
         }
     }
 
     public void writeJSON() {
         try {
-            TaskIO.writeText(taskList, "snap.json");
-            logger.info("Tasks snapped");
+            TaskIO.writeText(taskList, new File("snap.json"));
+            System.out.println("Tasks snapped");
         } catch (IOException e) {
             logger.error(e.getMessage());
-            logger.trace(e.getMessage(), e);
         }
     }
 
     public void mainMenu() {
         while (true) {
-            logger.info("Options:");
-            logger.info("1 - Save current tasks to the binary file(for next use) named db");
-            logger.info("2 - Save current tasks to the json file(for reading) named snap.json");
-            logger.info("3 - Enter Task Editor where you can view and edit current tasks");
-            logger.info("4 - Show next task in today's schedule");
-            logger.info("5 - Show calendar for the specified time period");
-            logger.info("Enter number (1-5 or 0 - Save and Quit):");
+            System.out.println("Options:");
+            System.out.println("1 - Save current tasks to the binary file(for next use) named db");
+            System.out.println("2 - Save current tasks to the json file(for reading) named snap.json");
+            System.out.println("3 - Enter Task Editor where you can view and edit current tasks");
+            System.out.println("4 - Show next task in today's schedule");
+            System.out.println("5 - Show calendar for the specified time period");
+            System.out.println("Enter number (1-5 or 0 - Save and Quit):");
             try {
                 switch (inputLine()) {
                     case "1":
@@ -88,11 +86,11 @@ public class ConsoleAPI {
                         calendar();
                         break;
                     default:
-                        logger.error("Wrong input");
+                        System.err.println("Wrong input");
                 }
             } catch (CancellationException e) {
                 writeBinary();
-                logger.warn("Quitting");
+                System.out.println("Quitting");
                 return;
             }
         }
@@ -103,15 +101,15 @@ public class ConsoleAPI {
         while (true) {
             ts = taskList.size();
             if (ts == 0) {
-                logger.warn("Task list is empty");
+                System.out.println("Task list is empty");
             } else printTasks(taskList);
-            logger.info("Options:");
-            logger.info("1 - Create new task");
+            System.out.println("Options:");
+            System.out.println("1 - Create new task");
             if (ts != 0) {
-                logger.info("2 - Change existing task");
-                logger.info("3 - Delete existing task");
-                logger.info("Enter number (1-3 or 0 - Exit to Main Menu):");
-            } else logger.info("Enter number (1 or 0 - Exit to Main Menu):");
+                System.out.println("2 - Change existing task");
+                System.out.println("3 - Delete existing task");
+                System.out.println("Enter number (1-3 or 0 - Exit to Main Menu):");
+            } else System.out.println("Enter number (1 or 0 - Exit to Main Menu):");
             try {
                 switch (inputLine()) {
                     case "1":
@@ -128,10 +126,10 @@ public class ConsoleAPI {
                             break;
                         }
                     default:
-                        logger.error("Wrong input");
+                        System.err.println("Wrong input");
                 }
             } catch (CancellationException e) {
-                logger.info("Exiting to Main Menu");
+                System.out.println("Exiting to Main Menu");
                 return;
             }
         }
@@ -141,24 +139,23 @@ public class ConsoleAPI {
         while (true) {
             try {
                 LocalDateTime start, end;
-                logger.info("Enter start");
+                System.out.println("Enter start");
                 start = timeFormatInput();
-                logger.info("Enter end");
+                System.out.println("Enter end");
                 end = timeFormatInput();
                 SortedMap<LocalDateTime, Set<Task>> smap = Tasks.calendar(taskList, start, end);
                 for (Map.Entry<LocalDateTime, Set<Task>> entry : smap.entrySet()) {
-                    logger.info(String.valueOf(entry.getKey()));
+                    System.out.println(entry.getKey());
                     printTasks(entry.getValue());
                 }
                 return;
             } catch (DateTimeParseException e) {
-                logger.error("Invalid format");
+                System.err.println("Invalid format");
             } catch (CancellationException e) {
-                logger.warn("Input was cancelled");
+                System.out.println("Input was cancelled");
                 return;
             } catch (InstantiationException | IllegalAccessException e) {
                 logger.error(e.getMessage());
-                logger.trace(e.getMessage(), e);
             }
         }
     }
@@ -169,18 +166,16 @@ public class ConsoleAPI {
             Set<Map.Entry<LocalDateTime, Set<Task>>> entries = Tasks.calendar(taskList, n, n.plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0)).entrySet();
             if (!entries.isEmpty()) {
                 Map.Entry<LocalDateTime, Set<Task>> entry = entries.iterator().next();
-                logger.info(String.valueOf(entry.getKey()));
+                System.out.println(entry.getKey());
                 printTasks(entry.getValue());
-            } else logger.warn("No tasks ahead");
+            } else System.out.println("No tasks ahead");
         } catch (InstantiationException | IllegalAccessException e) {
             logger.error(e.getMessage());
-            logger.trace(e.getMessage(), e);
         }
     }
 
     public String inputLine() throws CancellationException {
         String input = sc.nextLine();
-        logger.debug(input);
         if (Objects.equals(input, "0")) throw new CancellationException();
         return input;
     }
@@ -193,7 +188,7 @@ public class ConsoleAPI {
             } else if (inp.equalsIgnoreCase("N")) {
                 return false;
             } else {
-                logger.error("Invalid input");
+                System.err.println("Invalid input");
             }
         }
     }
@@ -203,44 +198,46 @@ public class ConsoleAPI {
             try {
                 if (repeated) {
                     LocalDateTime start, end;
-                    logger.info("Enter start");
+                    System.out.println("Enter start");
                     start = timeFormatInput();
-                    logger.info("Enter end");
+                    System.out.println("Enter end");
                     end = timeFormatInput();
-                    logger.info("Enter repeat interval");
+                    System.out.println("Enter repeat interval");
                     t.setTime(start, end, Integer.parseInt(sc.nextLine()));
                 } else {
-                    logger.info("Enter time");
+                    System.out.println("Enter time");
                     t.setTime(timeFormatInput());
                 }
                 return;
             } catch (DateTimeParseException e) {
-                logger.error("Invalid format");
+                System.err.println("Invalid format");
             } catch (NumberFormatException e) {
-                logger.error("Not a number");
+                System.err.println("Not a number");
             }
         }
     }
 
     private LocalDateTime timeFormatInput() throws CancellationException {
-        logger.info("Format: uuuu-MM-ddTHH:mm:ss");
-        return LocalDateTime.parse(inputLine());
+        String format = "uuuu-MM-dd HH:mm";
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format);
+        System.out.println("Format: " + format);
+        return LocalDateTime.parse(inputLine(),dtf);
     }
 
     private void createTask() {
         synchronized (taskList) {
             Task t = new Task();
             try {
-                logger.info("Enter title");
+                System.out.println("Enter title");
                 t.setTitle(inputLine());
-                logger.info("Is repeated?(Y/N)");
+                System.out.println("Is repeated?(Y/N)");
                 inputTime(t, inputYesNo());
-                logger.info("Is active?(Y/N)");
+                System.out.println("Is active?(Y/N)");
                 t.setActive(inputYesNo());
                 taskList.add(t);
-                logger.info("Task created");
+                System.out.println("Task created");
             } catch (CancellationException e) {
-                logger.warn("Creation was cancelled");
+                System.out.println("Creation was cancelled");
             }
         }
     }
@@ -249,34 +246,34 @@ public class ConsoleAPI {
         synchronized (taskList) {
             while (true) {
                 try {
-                    logger.info("Enter index");
+                    System.out.println("Enter index");
                     Task t = taskList.getTask(Integer.parseInt(inputLine()));
-                    logger.info("Options:");
-                    logger.info("1 - Change title");
-                    logger.info("2 - Change time");
-                    logger.info("3 - Change activity)");
-                    logger.info("Enter number (1-3 or 0 - Cancel change):");
+                    System.out.println("Options:");
+                    System.out.println("1 - Change title");
+                    System.out.println("2 - Change time");
+                    System.out.println("3 - Change activity)");
+                    System.out.println("Enter number (1-3 or 0 - Cancel change):");
                     switch (inputLine()) {
                         case "1":
-                            logger.info("Enter title");
+                            System.out.println("Enter title");
                             t.setTitle(inputLine());
-                            logger.info("Title changed");
+                            System.out.println("Title changed");
                             return;
                         case "2":
-                            logger.info("Is repeated?(Y/N)");
+                            System.out.println("Is repeated?(Y/N)");
                             inputTime(t, inputYesNo());
-                            logger.info("Time changed");
+                            System.out.println("Time changed");
                             return;
                         case "3":
-                            logger.info("Is active?(Y/N)");
+                            System.out.println("Is active?(Y/N)");
                             t.setActive(inputYesNo());
-                            logger.info("Activity changed");
+                            System.out.println("Activity changed");
                             return;
                     }
                 } catch (IndexOutOfBoundsException e) {
-                    logger.error("Wrong index");
+                    System.err.println("Wrong index");
                 } catch (CancellationException e) {
-                    logger.warn("Change was cancelled");
+                    System.out.println("Change was cancelled");
                     return;
                 }
             }
@@ -287,16 +284,16 @@ public class ConsoleAPI {
         synchronized (taskList) {
             while (true) {
                 try {
-                    logger.info("Enter index");
+                    System.out.println("Enter index");
                     taskList.remove(taskList.getTask(Integer.parseInt(inputLine())));
-                    logger.info("Task deleted");
+                    System.out.println("Task deleted");
                     return;
                 } catch (IndexOutOfBoundsException e) {
-                    logger.error("Wrong index");
+                    System.err.println("Wrong index");
                 } catch (NumberFormatException e) {
-                    logger.error("Not a number");
+                    System.err.println("Not a number");
                 } catch (CancellationException e) {
-                    logger.warn("Deletion was cancelled");
+                    System.out.println("Deletion was cancelled");
                     return;
                 }
             }
@@ -306,7 +303,7 @@ public class ConsoleAPI {
     private void printTasks(Iterable<Task> tasks) {
         int i = 0;
         for (Task t : tasks) {
-            logger.info("[" + i++ + "] " + taskToString(t));
+            System.out.println("[" + i++ + "] " + taskToString(t));
         }
     }
 

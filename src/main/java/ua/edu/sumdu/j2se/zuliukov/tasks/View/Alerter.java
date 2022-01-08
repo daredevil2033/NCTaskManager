@@ -20,7 +20,7 @@ public class Alerter implements Runnable {
     public Alerter(ArrayTaskList taskList) {
         this.taskList = taskList;
         if (noSupport) {
-            logger.error("System tray not supported");
+            System.err.println("System tray not supported");
         } else {
             SystemTray tray = SystemTray.getSystemTray();
             Image image = Toolkit.getDefaultToolkit().createImage("icon.png");
@@ -30,7 +30,6 @@ public class Alerter implements Runnable {
                 tray.add(trayIcon);
             } catch (AWTException e) {
                 logger.error(e.getMessage());
-                logger.trace(e.getMessage(), e);
             }
         }
     }
@@ -59,7 +58,6 @@ public class Alerter implements Runnable {
                 Thread.sleep(1000);
             } catch (InstantiationException | IllegalAccessException | InterruptedException e) {
                 logger.error(e.getMessage());
-                logger.trace(e.getMessage(), e);
             }
         }
     }

@@ -65,20 +65,8 @@ public class TaskIO {
         }
     }
 
-    public static void writeBinary(AbstractTaskList tasks, String path) throws IOException {
-        try (FileOutputStream fileOutputStream = new FileOutputStream(path)) {
-            write(tasks, fileOutputStream);
-        }
-    }
-
     public static void readBinary(AbstractTaskList tasks, File file) throws IOException {
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
-            read(tasks, fileInputStream);
-        }
-    }
-
-    public static void readBinary(AbstractTaskList tasks, String path) throws IOException {
-        try (FileInputStream fileInputStream = new FileInputStream(path)) {
             read(tasks, fileInputStream);
         }
     }
@@ -192,20 +180,8 @@ public class TaskIO {
         }
     }
 
-    public static void writeText(AbstractTaskList tasks, String path) throws IOException {
-        try (FileWriter fileWriter = new FileWriter(path)) {
-            write(tasks, fileWriter);
-        }
-    }
-
     public static void readText(AbstractTaskList tasks, File file) throws IOException {
         try (FileReader fileReader = new FileReader(file)) {
-            read(tasks, fileReader);
-        }
-    }
-
-    public static void readText(AbstractTaskList tasks, String path) throws IOException {
-        try (FileReader fileReader = new FileReader(path)) {
             read(tasks, fileReader);
         }
     }

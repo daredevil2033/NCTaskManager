@@ -1,5 +1,6 @@
 /target/
 /.idea/
+/src/test/
 /snap.json
 /class.uml
 /class.png
