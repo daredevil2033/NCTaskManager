@@ -17,6 +17,10 @@ public class Alerter implements Runnable {
     private final ArrayTaskList taskList;
     private TrayIcon trayIcon;
 
+    /**
+     * If the system has support for SystemTray - initializes it
+     * @param taskList ArrayTaskList to check current state of a task list from
+     */
     public Alerter(ArrayTaskList taskList) {
         this.taskList = taskList;
         if (noSupport) {
@@ -34,6 +38,11 @@ public class Alerter implements Runnable {
         }
     }
 
+    /**
+     * If the system has no support for SystemTray - stops
+     * Else checks every second whether there is a task pending
+     * If there is - alerts the user about it
+     */
     @Override
     public void run() {
         if (noSupport) return;
@@ -62,7 +71,12 @@ public class Alerter implements Runnable {
         }
     }
 
-    public void displayTray(LocalDateTime ldt, String msg) {
+    /**
+     * Displays the alert with the caption indicating the time the alert was sent and the message containing current tasks for the time the alert was sent
+     * @param ldt LocalDateTime that indicates the time the alert was sent
+     * @param msg String containing the current tasks for the ldt time
+     */
+    private void displayTray(LocalDateTime ldt, String msg) {
         trayIcon.displayMessage(String.valueOf(ldt), msg, TrayIcon.MessageType.NONE);
     }
 }

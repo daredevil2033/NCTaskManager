@@ -22,25 +22,37 @@ public class ConsoleAPI {
     private final File file;
     private final ArrayTaskList taskList;
 
+    /**
+     * @param path String filepath to the binary file
+     * @param taskList ArrayTaskList to store current state of a task list
+     */
     public ConsoleAPI(String path, ArrayTaskList taskList) {
         this.file = new File(path);
         this.taskList = taskList;
     }
 
+    /**
+     * Reads the taskList from the binary file
+     * Path to the file is specified in the constructor
+     */
     public void readFile() {
         try {
             try {
                 TaskIO.readBinary(taskList, file);
             } catch (EOFException e) {
-                System.err.println("File db has been corrupted");
-                if (file.delete()) System.err.println("File db was deleted");
-                if (file.createNewFile()) System.err.println("New file db was created");
+                System.err.println("Binary file has been corrupted");
+                if (file.delete()) System.err.println("Binary file was deleted");
+                if (file.createNewFile()) System.err.println("New binary file was created");
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
+    /**
+     * Writes the taskList to the binary file
+     * Path to the file is specified in the constructor
+     */
     public void writeBinary() {
         try {
             TaskIO.writeBinary(taskList, file);
@@ -50,6 +62,9 @@ public class ConsoleAPI {
         }
     }
 
+    /**
+     * Writes the taskList to the text file snap.json
+     */
     public void writeJSON() {
         try {
             TaskIO.writeText(taskList, new File("snap.json"));
@@ -59,6 +74,9 @@ public class ConsoleAPI {
         }
     }
 
+    /**
+     * Displays the Main Menu
+     */
     public void mainMenu() {
         while (true) {
             System.out.println("Options:");
@@ -96,6 +114,10 @@ public class ConsoleAPI {
         }
     }
 
+    /**
+     * Displays the Task Editor
+     * Options 2 and 3 are only available when the taskList isn't empty
+     */
     public void taskEditor() {
         int ts;
         while (true) {
@@ -135,6 +157,9 @@ public class ConsoleAPI {
         }
     }
 
+    /**
+     * Prompts entering the time frame and displays a calendar for it
+     */
     public void calendar() {
         while (true) {
             try {
@@ -160,6 +185,9 @@ public class ConsoleAPI {
         }
     }
 
+    /**
+     * Displays the next task(or it's repetition) in the current day
+     */
     public void remind() {
         try {
             LocalDateTime n = LocalDateTime.now();
@@ -174,12 +202,23 @@ public class ConsoleAPI {
         }
     }
 
+    /**
+     * Forwards the input after checking it for the halt input("0")
+     * If the halt input is detected throws an Exception indicating the intent to stop the current action
+     * @return input String
+     * @throws CancellationException when input is "0"
+     */
     public String inputLine() throws CancellationException {
         String input = sc.nextLine();
         if (Objects.equals(input, "0")) throw new CancellationException();
         return input;
     }
 
+    /**
+     * Converts Y(y)/N(n) input to boolean
+     * @return boolean meaning of the input
+     * @throws CancellationException if the input was cancelled
+     */
     private boolean inputYesNo() throws CancellationException {
         while (true) {
             String inp = inputLine();
@@ -193,6 +232,13 @@ public class ConsoleAPI {
         }
     }
 
+    /**
+     * Prompts to input start and end times as well as repeat interval for the task if it is repeated
+     * Or just the time otherwise
+     * @param t Task to input time for
+     * @param repeated indicates whether the Task is repeated
+     * @throws CancellationException if the input was cancelled
+     */
     private void inputTime(Task t, boolean repeated) throws CancellationException {
         while (true) {
             try {
@@ -217,6 +263,12 @@ public class ConsoleAPI {
         }
     }
 
+    /**
+     * Converts the String input into LocalDateTime value using the format uuuu-MM-dd HH:mm
+     * @return LocalDateTime value of input
+     * @throws CancellationException if the input was cancelled
+     * @throws DateTimeParseException if the input doesn't match the format
+     */
     private LocalDateTime timeFormatInput() throws CancellationException {
         String format = "uuuu-MM-dd HH:mm";
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format);
@@ -224,6 +276,9 @@ public class ConsoleAPI {
         return LocalDateTime.parse(inputLine(),dtf);
     }
 
+    /**
+     * Prompts entering the characteristics of the new Task and adds it to the taskList
+     */
     private void createTask() {
         synchronized (taskList) {
             Task t = new Task();
@@ -242,6 +297,9 @@ public class ConsoleAPI {
         }
     }
 
+    /**
+     * Changes the chosen characteristic of a chosen Task
+     */
     private void changeTask() {
         synchronized (taskList) {
             while (true) {
@@ -280,6 +338,9 @@ public class ConsoleAPI {
         }
     }
 
+    /**
+     * Deletes the chosen task
+     */
     private void deleteTask() {
         synchronized (taskList) {
             while (true) {
@@ -300,6 +361,10 @@ public class ConsoleAPI {
         }
     }
 
+    /**
+     * Indexes and prints the supplied tasks
+     * @param tasks collection of tasks to be printed
+     */
     private void printTasks(Iterable<Task> tasks) {
         int i = 0;
         for (Task t : tasks) {
@@ -307,12 +372,23 @@ public class ConsoleAPI {
         }
     }
 
+    /**
+     * Converts Task attributes into a compact String
+     * @param t Task to be converted
+     * @return compact String representation of the Task
+     */
     private String taskToString(Task t) {
         if (t.isRepeated())
             return t.getTitle() + " " + t.getStartTime() + " " + t.getEndTime() + " " + t.getRepeatInterval() + " " + activeToString(t.isActive());
         else return t.getTitle() + " " + t.getTime() + " " + activeToString(t.isActive());
     }
 
+    /**
+     * Converts true/false to "active"/"not active"
+     * Used for a better representation of an active attribute state
+     * @param a boolean value to be converted
+     * @return "active" when a==true and "not active" when a==false
+     */
     private String activeToString(boolean a) {
         return a ? "active" : "not active";
     }
